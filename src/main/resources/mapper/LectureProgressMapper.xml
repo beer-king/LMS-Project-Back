@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.video.mapper.LectureProgressMapper">
+
+    <!-- progress_id 조회 -->
+    <select id="findProgressId" resultType="long">
+        SELECT progress_id
+        FROM lecture_progress
+        WHERE user_id = #{userId}
+        AND lecture_id = #{lectureId}
+    </select>
+
+    <!-- 부모 진행 정보 생성 -->
+    <insert id="insertLectureProgress">
+        INSERT IGNORE INTO lecture_progress ( <!--ignore into : 기존 데이터유지(새 데이터 무시)-->
+        user_id,
+        lecture_id,
+        total_segments,
+        last_watched_time,
+        )
+        VALUES (
+        #{userId},
+        #{lectureId},
+        #{totalSegments},
+        0
+        )
+    </insert>
+
+    <!--구간 완료 처리 (시간 제거)-->
+    <insert id="insertSegmentCompleted">
+        INSERT INTO lecture_progress_segment (
+        progress_id,
+        segment_index,
+        completed_yn
+        )
+        VALUES (
+        #{progressId},
+        #{segmentIndex},
+        'Y'
+        )
+        ON DUPLICATE KEY UPDATE <!--기존 데이터 수정(데이터 없으면 insert 있으면 update)-->
+        progress_id = progress_id
+    </insert>
+
+
+    <!-- 완료된 구간 수 -->
+    <select id="countCompletedSegments" resultType="int">
+        SELECT COUNT(*)
+        FROM lecture_progress_segment
+        WHERE progress_id = #{progressId}
+        AND completed_yn = 'Y'
+    </select>
+
+    <!-- 부모 테이블 업데이트 -->
+    <update id="updateLectureProgress">
+        UPDATE lecture_progress
+        SET completed_segments = #{completedSegments},
+        completed_yn =
+        CASE
+        WHEN completed_segments / total_segments
+        >= #{completeRatio}
+        THEN 'Y'
+        ELSE 'N'
+        END
+        WHERE progress_id = #{progressId}
+    </update>
+
+    <!-- 수료 여부 확인 -->
+    <select id="isLectureCompleted" resultType="boolean">
+        SELECT completed_yn = 'Y'
+        FROM lecture_progress
+        WHERE user_id = #{userId}
+        AND lecture_id = #{lectureId}
+    </select>
+
+
+    <!--================================이전시청관련 쿼리===================================    -->
+
+    <!-- 마지막 시청 위치 조회 -->
+    <select id="selectLastWatchedTime" resultType="int">
+        SELECT last_watched_time
+        FROM lecture_progress
+        WHERE user_id = #{userId}
+        AND lecture_id = #{lectureId}
+    </select>
+
+    <!-- 마지막 시청 위치 업데이트 -->
+    <update id="updateLastWatchedTime">
+        UPDATE lecture_progress
+        SET last_watched_time = #{lastWatchedTime},
+        updated_at = NOW()
+        WHERE progress_id = #{progressId}
+    </update>
+
+</mapper>

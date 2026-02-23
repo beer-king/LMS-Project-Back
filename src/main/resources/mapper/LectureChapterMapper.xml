@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.video.mapper.LectureChapterMapper">
+    <select id="selectChaptersByLecture" resultType="com.example.video.vo.LectureChapter">
+        SELECT
+            chapter_id,
+            chapter_index,
+            start_time,
+            end_time
+        FROM LECTURE_CHAPTER
+        WHERE lecture_id = #{lectureId}
+        ORDER BY chapter_index ASC
+    </select>
+
+    <!-- 챕터 진도 존재 여부 -->
+    <select id="existsChapterProgress" resultType="int">
+        SELECT COUNT(*)
+        FROM LECTURE_CHAPTER_PROGRESS
+        WHERE user_id = #{userId}
+        AND chapter_id = #{chapterId}
+    </select>
+
+    <!-- 챕터 진도 저장 -->
+    <insert id="insertChapterProgress">
+        INSERT INTO LECTURE_CHAPTER_PROGRESS (
+        user_id,
+        lecture_id,
+        chapter_id,
+        completed_yn,
+        created_at
+        )
+        VALUES (
+        #{userId},
+        #{lectureId},
+        #{chapterId},
+        'Y',
+        NOW()
+        )
+    </insert>
+
+    <!-- 강의의 전체 챕터 수 -->
+    <select id="countLectureChapters" resultType="int">
+        SELECT COUNT(*)
+        FROM LECTURE_CHAPTER
+        WHERE lecture_id = #{lectureId}
+    </select>
+
+    <!-- 사용자가 완료한 챕터 수 -->
+    <select id="countCompletedChapters" resultType="int">
+        SELECT COUNT(*)
+        FROM LECTURE_CHAPTER_PROGRESS
+        WHERE user_id = #{userId}
+        AND lecture_id = #{lectureId}
+        AND completed_yn = 'Y'
+    </select>
+</mapper>
