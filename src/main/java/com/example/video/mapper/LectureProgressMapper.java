@@ -1,8 +1,6 @@
 package com.example.video.mapper;
 
-import com.example.video.vo.LectureProgress;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface LectureProgressMapper {
@@ -58,5 +56,5 @@ public interface LectureProgressMapper {
             String lectureId
     );
 
-    void updateLastWatchedTime(Long progressId, int lastWatchedTime);
+    void updateLastWatchedTime(String userId, String lectureId, int lastWatchedTime);
 }

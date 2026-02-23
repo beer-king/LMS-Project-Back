@@ -37,17 +37,18 @@ public class LectureResumeService {
     @Transactional
     public void saveLastWatchedTime(ResumeRequest req) {
 
-        Long progressId = lectureProgressMapper.findProgressId(req.getUserId(), req.getLectureId());
+        /*Long progressId = lectureProgressMapper.findProgressId(req.getUserId(), req.getLectureId());
 
         if(progressId == null){ // progressId 없는경우 생성
             lectureProgressMapper.insertLectureProgress(req.getUserId(), req.getLectureId());
 
             progressId = lectureProgressMapper.findProgressId(req.getUserId(), req.getLectureId());
-        }
+        }  없애는 이유 : Record has changed since last read in table 'lecture_progress' 읽은이후에 값이 바뀐다*/
 
         // 마지막 시청위치 저장!!
         lectureProgressMapper.updateLastWatchedTime(
-                progressId,
+                req.getUserId(),
+                req.getLectureId(),
                 req.getLastWatchedTime()
         );
 

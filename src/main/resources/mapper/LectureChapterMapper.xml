@@ -30,7 +30,7 @@
         lecture_id,
         chapter_id,
         completed_yn,
-        created_at
+        reg_dt
         )
         VALUES (
         #{userId},
