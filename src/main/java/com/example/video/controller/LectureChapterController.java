@@ -2,8 +2,6 @@ package com.example.video.controller;
 
 import com.example.video.dto.ChapterProgressRequest;
 import com.example.video.dto.LectureChapterResponse;
-import com.example.video.dto.LectureCompleteRequest;
-import com.example.video.dto.LectureCompleteResponse;
 import com.example.video.service.LectureChapterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,21 +38,4 @@ public class LectureChapterController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 강의 수료 여부 조회
-     */
-    /*@PostMapping("/complete/check")
-    public ResponseEntity<LectureCompleteResponse> checkLectureComplete(
-            @RequestBody LectureCompleteRequest req
-    ) {
-        boolean completed =
-                lectureChapterService.isLectureCompleted(
-                        req.getUserId(),
-                        req.getLectureId()
-                );
-
-        return ResponseEntity.ok(
-                new LectureCompleteResponse(completed)
-        );
-    }*/
 }

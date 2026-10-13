@@ -81,14 +81,14 @@
 
     <!-- 마지막 시청 위치 조회 -->
     <select id="selectLastWatchedTime" resultType="int">
-        SELECT nvl(last_watched_time,0)
+        SELECT COALESCE(last_watched_time, 0)
         FROM lecture_progress
         WHERE user_id = #{userId}
         AND lecture_id = #{lectureId}
     </select>
 
     <!-- 마지막 시청 위치 업데이트 -->
-    <insert id="updateLastWatchedTime">
+    <update id="updateLastWatchedTime">
         <![CDATA[
         UPDATE lecture_progress
         SET last_watched_time = #{lastWatchedTime},
@@ -97,5 +97,5 @@
         AND lecture_id = #{lectureId}
         AND last_watched_time < #{lastWatchedTime}
         ]]>
-    </insert>
+    </update>
 </mapper>

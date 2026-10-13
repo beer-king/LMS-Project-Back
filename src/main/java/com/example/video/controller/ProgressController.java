@@ -1,17 +1,14 @@
 package com.example.video.controller;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.video.dto.CompletionRequest;
 import com.example.video.dto.CompletionResponse;
 import com.example.video.dto.SegmentProgressRequest;
 import com.example.video.service.LectureCompletionService;
 import com.example.video.service.LectureProgressService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
 
 @RestController
 @RequiredArgsConstructor

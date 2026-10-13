@@ -1,60 +1,31 @@
 package com.example.video.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface LectureProgressMapper {
 
-    Long findProgressId(
-            String userId,
-            String lectureId
-    );
+    Long findProgressId(@Param("userId") String userId, @Param("lectureId") String lectureId);
 
-    void insertLectureProgress(
-            String userId,
-            String lectureId,
-            int totalSegments
-    );
+    void insertLectureProgress(@Param("userId") String userId,
+                               @Param("lectureId") String lectureId,
+                               @Param("totalSegments") int totalSegments);
 
-    void insertLectureProgress(
-            String userId,
-            String lectureId
-    );
+    int countCompletedSegments(@Param("progressId") Long progressId);
 
-    int countTotalSegments(Long lectureId);
+    void updateLectureProgress(@Param("progressId") Long progressId,
+                               @Param("completedSegments") int completedSegments,
+                               @Param("completeRatio") double completeRatio);
 
-    void upsertSegmentProgress(
-            Long progressId,
-            int segmentIndex,
-            int watchSeconds,
-            int completeSeconds
-    );
+    boolean isLectureCompleted(@Param("userId") String userId, @Param("lectureId") String lectureId);
 
-    // 완료된 구간 수
-    int countCompletedSegments(
-            Long progressId
-    );
+    void insertSegmentCompleted(@Param("progressId") Long progressId,
+                                @Param("segmentIndex") int segmentIndex);
 
-    void updateLectureProgress(
-            Long progressId,
-            int completedSegments,
-            double completeRatio
-    );
+    Integer selectLastWatchedTime(@Param("userId") String userId, @Param("lectureId") String lectureId);
 
-    boolean isLectureCompleted(
-            String userId,
-            String lectureId
-    );
-
-    void insertSegmentCompleted(
-            Long progressId,
-            int segmentIndex
-    );
-
-    int selectLastWatchedTime(
-            String userId,
-            String lectureId
-    );
-
-    void updateLastWatchedTime(String userId, String lectureId, int lastWatchedTime);
+    void updateLastWatchedTime(@Param("userId") String userId,
+                              @Param("lectureId") String lectureId,
+                              @Param("lastWatchedTime") int lastWatchedTime);
 }

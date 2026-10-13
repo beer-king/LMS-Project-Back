@@ -15,6 +15,7 @@ public class LectureChapterService {
 
     private final LectureChapterMapper lectureChapterMapper;
 
+    @Transactional(readOnly = true)
     public List<LectureChapterResponse> getChaptersByLecture(String lectureId) {
 
         return lectureChapterMapper
@@ -59,6 +60,7 @@ public class LectureChapterService {
     /**
      * 강의 수료 여부 판단
      */
+    @Transactional(readOnly = true)
     public boolean isLectureCompleted(
             String userId,
             String lectureId
